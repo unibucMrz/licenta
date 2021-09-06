@@ -1,0 +1,16 @@
+.profile-link{
+    text-decoration: none;
+    color: black;
+}
+
+
+.profile-link:hover{
+    text-decoration: none;
+    color: black;
+}
+
+
+.image{
+    max-width: 50%;
+    max-height: 80%;
+}

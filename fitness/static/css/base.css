@@ -1,0 +1,28 @@
+
+
+html{
+    /*2  height: 100%;*/
+    
+}
+
+
+body{
+    background-image: url('../images/background2.jpg');
+    /*2  height: 100%;*/
+}
+
+.white-background{
+    background-color: white;
+    /*1  height: 100vh;*/
+    /*2  height: 100%;*/
+    min-height: 100vh
+}
+
+
+.paragraph{
+    text-indent: 4%;
+    text-align: justify;
+
+
+}
+
