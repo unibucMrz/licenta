@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+ 
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'css/base.css' %}">
+  <script src="{% static 'fontawesome_free/js/all.min.js' %}"></script>
+
+  <title>
+  
+  {% block title %}Dosport{% endblock %}  
+
+  </title>
+  
+
+  {% block style %}
+  
+  
+  {% endblock style %}
+  
+
+
+
+</head>
+
+
+</body>
+
+  {% block navbar %}
+
+  <div class="navbar navbar-expand-sm navbar-dark bg-dark">
+  
+      <a class="navbar-brand" href="{% url 'index' %}"><i class="fas fa-home"></i>Dosport</a>
+      
+
+
+      <div class="collapse navbar-collapse ">
+
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item"><a class="nav-link" href="{% url 'trainers-list' %}"><i class="fas fa-users"></i>Trainers</a></li>
+
+          {% if user.is_authenticated %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'weight-progression' %}"><i class="fas fa-weight"></i>Weight-progression</a></li>
+
+            {% if user.is_trainer %}
+
+              <li class="nav-item">
+                <div class="dropdown">
+
+                  <button class="btn btn-danger dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Trainer Menu
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="{% url 'my-clients' %}">My clients</a>
+                    <a class="dropdown-item" href="{% url 'exercises-list' %}">Exercises</a>
+                    <a class="dropdown-item" href="{% url 'create-exercise' %}">Create exercise</a>
+                    <a class="dropdown-item" href="{% url 'create-day' %}">Create day</a>
+
+                    {% comment "" %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'create-exercise' %}">Create-exercise</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'my-clients' %}">My Clients</a></li>
+                    {% endcomment %}             
+                    
+                  </div>
+                
+                </div>
+              </li>
+
+            {% else %}
+              {% if user.trainer %}
+                <li class="nav-item"><a class="nav-link" href="{% url 'exercises-list' %}">Exercises</a></li>
+                <li class="nav-item"><a class="nav-link" href="{% url 'day-list' %}">Training days</a></li>
+
+              {% endif %}   
+
+            {% endif %}
+          {% endif %}
+        </ul>
+
+        <ul class="navbar-nav">
+          {% if user.is_authenticated %}
+            {% if user.is_trainer and user.get_request_number %}
+              <li class="nav-item"><a class="nav-link" href="{% url 'trainer-response' %}"><i class="far fa-bell"></i>{{user.get_request_number}}</a></li>
+            {% endif %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'my-account' %}"><i class="far fa-user"></i>Account</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+
+            {% comment "" %}
+            <li class="nav-item"><a class="nav-link" ><i class="fas fa-bell "></i>2</a></li>            
+            {% endcomment %}
+
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+          {% endif %}
+
+        </ul>
+
+
+
+      </div>
+      
+  </div>
+
+  {% endblock %}
+
+
+
+  <div class="container white-background ">
+    <h1 class="mt-2">Dosport</h1>
+		<hr class="mt-0 mb-4">
+
+    {% block content %}{% endblock %}
+
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+</body>
+
+</html>

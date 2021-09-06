@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+
+{% block title %}Create{% endblock %}
+
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<h1>{{day}} {{day.user}}</h1>
+
+{% if day.exerciseinstance_set.all %}
+
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Exercise</th>
+				<th></th>
+				<th></th>
+
+            </tr>
+        </thead>
+        {% for exercise in day.exerciseinstance_set.all %}
+            <tr>
+                <td>
+                <a href={% url 'exercise-instance-detail' id=exercise.id %}>
+                
+                {{exercise.exercise.name}} 
+                </a>
+                
+                </td>
+                <td><a href={% url 'add-given-set' id=exercise.id %}>Add set </a></td>
+                <td><a href={% url 'add-given-set' id=exercise.id %}>Delete </a></td>
+
+				
+            </tr>
+        {% endfor %}
+        
+    </table>
+
+{% endif %}
+
+<form method="POST" class="form-group" enctype="multipart/form-data">
+	{% csrf_token %}
+	{{ form|crispy }}
+	<button type="submit" class="btn btn-success">Create</button>
+</form>
+{% endblock %}

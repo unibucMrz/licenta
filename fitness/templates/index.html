@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+
+{% block content %}
+    <p class='lead paragraph'>
+        Dosport is a platform that aims to make a deeper connection between people and sports, this will be
+    achieved through guidance by coaches trained to recommend and monitor progress and performance over
+    a long period of time.
+    </p>
+    <p class='lead paragraph'>
+
+        The application aims to move as much of the population in the right direction, regardless of age,
+    gender, geographical region or any sort of impediment to enjoy an active and healthy life
+    </p>
+    {% if user.quote %}
+        <h2 class='mt-4'> {{user.quote}} </h2>
+    {% endif %}
+
+       
+    {% if user.about %}
+        <p class='lead paragraph'>{{user.about}}</p>
+    {% endif %}
+{% endblock %}

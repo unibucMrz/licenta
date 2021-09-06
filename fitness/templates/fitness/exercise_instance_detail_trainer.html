@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock  %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<a class='btn btn-info btn-lg' href={% url 'exercise-detail' id=exercise.exercise.id %}>{{exercise.exercise}} for</a> 
+<a class='btn btn-info btn-lg' href={% url 'profile' id=exercise.day.user.id %}>{{exercise.day.user}} on</a> 
+<a class='btn btn-info btn-lg' href={% url 'day-detail' id=exercise.day.id %}>{{exercise.day}}</a>
+
+{% if exercise.setpair_set.all %}
+    <h3>Sets</h3>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+               
+                <th>Weight</th>
+                <th></th>
+                <th>Reps</th>
+                <th></th>
+
+            </tr>
+            <tr>
+                <th>Given</th>
+                <th>Done</th>
+                <th>Given</th>
+                <th>Done</th>
+            </tr>
+        </thead>
+
+        {% for set_pair in exercise.setpair_set.all %}
+            <tr>
+               
+                <td>{{set_pair.given_set.weight}}</td>
+                <td>{{set_pair.done_set.weight}}</td>
+                <td>{{set_pair.given_set.repetitions}}</td>
+                <td>{{set_pair.done_set.repetitions}}</td>
+            </tr>
+        {% endfor %}
+
+    </table>
+
+    <h5>Add new set</h5>
+    <form action={% url 'add-given-set' id=exercise.id %} method="POST" class="form-group" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form_set|crispy }}
+        <button type="submit" class="btn btn-success">Add</button>
+    </form>
+{% endif %}
+<br>
+
+{% if exercise.performance %}
+
+    <div class="embed-responsive embed-responsive-21by9">
+        <video controls >
+            <source src="{{exercise.performance.url}}" type="video/mp4">
+        </video>
+    </div>
+    <br>
+    
+    <form action={% url 'add-review' id=exercise.id %} method="POST" class="form-group" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form_review|crispy }}
+        <button type="submit" class="btn btn-success">Add review</button>
+    </form>
+{% endif %}
+
+{% endblock  %}

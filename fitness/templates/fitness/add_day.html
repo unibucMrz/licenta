@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+
+{% block title %}Add day{% endblock %}
+
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<h1>Add taining for {{client}}</h1>
+
+
+<form method="POST" class="form-group" enctype="multipart/form-data">
+	{% csrf_token %}
+	{{ form|crispy }}
+	<button type="submit" class="btn btn-success">Create</button>
+</form>
+{% endblock %}

@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock  %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<a class='btn btn-info btn-lg' href={% url 'exercise-detail' id=exercise.exercise.id %}>{{exercise.exercise}} on</a>  
+<a class='btn btn-info btn-lg' href={% url 'day-detail' id=exercise.day.id %}>{{exercise.day}}</a>
+
+{% if exercise.review %}
+    <p class='lead'>Review: {{exercise.review}}</p>
+{% endif %}
+
+
+{% if exercise.setpair_set.all %}
+    <h3>Sets</h3>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+               
+                <th>Weight</th>
+                <th></th>
+                <th>Reps</th>
+                <th></th>
+                <th></th>
+
+            </tr>
+            <tr>
+                <th>Given</th>
+                <th>Done</th>
+                <th>Given</th>
+                <th>Done</th>
+                <th></th>
+
+            </tr>
+        </thead>
+
+        {% for set_pair in exercise.setpair_set.all %}
+            <tr>
+               {% if set_pair.done_set %}
+                <td>{{set_pair.given_set.weight}}</td>
+                <td>{{set_pair.done_set.weight}}</td>
+
+                <td>{{set_pair.given_set.repetitions}}</td>
+                <td>{{set_pair.done_set.repetitions}}</td>
+                <td></td>
+
+                {% else %}
+
+                <form action={% url 'add-done-set' id=set_pair.id %} method="POST" class="form-group" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                    <td>{{set_pair.given_set.weight}}</td>
+                    <td>{{form_set.weight}}</td>
+
+                    <td>{{set_pair.given_set.repetitions}}</td>
+                    <td>{{form_set.repetitions}}</td>
+
+                    <td> <button type="submit" class="btn btn-success">Add</button> </td>
+                </form>
+                {% endif %}
+
+
+            </tr>
+        {% endfor %}
+
+    </table> 
+
+{% endif %}
+<br>
+
+{% if exercise.performance %}
+
+    <div class="embed-responsive embed-responsive-21by9">
+        <video controls >
+            <source src="{{exercise.performance.url}}" type="video/mp4">
+        </video>
+    </div>
+    <br>
+    
+    
+{% endif %}
+
+
+<form action={% url 'add-performance' id=exercise.id %} method="POST" class="form-group" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form_performance|crispy }}
+    <button type="submit" class="btn btn-success">Add performance</button>
+</form>
+<br>
+
+{% endblock  %}

@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock  %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+<h2>{{day}}</h2>
+
+
+{% if day.duration %}
+    <h4>Duration: {{day.duration}}</h4>
+{% endif %}
+
+{% if day.description %}
+    <p class='lead'>Description: {{day.description}}</p>
+{% endif %}
+
+{% if day.exerciseinstance_set.all %}
+    <div class="list-group">
+    {% for exercise in day.exerciseinstance_set.all  %}
+        <a class="list-group-item list-group-item-action list-group-item-secondary" href={% url 'exercise-instance-detail' exercise.id %}> {{exercise.exercise}} </a>
+    {% endfor %}
+    </div>
+{% endif %}
+
+
+
+
+{% endblock  %}

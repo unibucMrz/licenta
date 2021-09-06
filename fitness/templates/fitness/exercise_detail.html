@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+
+
+{% block title %}{{exercise}}{% endblock  %}
+
+
+{% block content %}
+
+
+    <h2>Exercise: {{exercise}}</h2>
+
+    {% if user.is_trainer  %}
+        <form action={% url 'delete-exercise' %} method="POST">
+        {% csrf_token %}
+        <button class="btn btn-danger" name="id" value="{{exercise.pk}}">Delete exercise</button>
+
+            <a class="btn btn-primary " href={% url 'edit-exercise' id=exercise.pk %}>Edit</a>
+
+    </form>
+    
+
+    {% endif %}
+
+
+    <h3>Priority: {{exercise.get_priority_display}}</h3>
+    {% if exercise.tutorial %}
+
+
+
+    <div class="embed-responsive embed-responsive-21by9">
+
+        <video controls >
+            <source src="{{exercise.tutorial.url}}" type="video/mp4">
+        </video>
+    </div>
+   
+{% endif %}
+
+<br>
+
+{% if exercise.description %}
+    <p class="lead paragraph">
+        {{exercise.description}}
+    </p>
+{% endif %}
+
+
+
+
+{% endblock  %}

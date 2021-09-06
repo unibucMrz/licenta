@@ -1,0 +1,182 @@
+{% extends "base.html" %}
+
+
+{% block title %}{{profile.first_name}} {{profile.last_name}}{% endblock  %}
+
+
+{% block content %}
+
+
+
+
+
+
+
+
+<div class="main-body">
+    
+          <div class="row gutters-sm">
+            <div class="col-md-4 mb-3">
+              <div class="card">
+                <div class="card-body">
+                  <div class="d-flex flex-column align-items-center text-center">
+                    {% if  profile.profile_picture %}
+                        <img src="{{profile.profile_picture.url}}" alt="Admin" class="rounded-circle" width="150">
+                    {% else %}
+                        {% load static %}
+                        <img src="{% static 'images/default_user_picture.png' %}" alt="Admin" class="rounded-circle" width="150">
+                    {% endif %}
+                                    
+                    <div class="mt-3">
+                      <h4>{{profile}}</h4>
+                        <p class="text-secondary mb-1">{% if profile.quote %}{{profile.quote}}{% else %}I don't talk to much.{% endif %}</p>
+                      <p class="text-muted font-size-sm"></p>
+
+
+                    {% if profile.trainer == user %}
+                            <div class="d-grid gap-3">
+                                <div class="p-1">
+                                    <form action={% url 'add-day' id=profile.id %}>
+                                        <button class="btn btn-dark">Give training</button>
+                                    </form>      
+                                </div>
+                                <div >
+                                    <form action={% url 'day-list-trainer' id=profile.id %}>
+                                        <button class="btn btn-dark">Training days</button>
+                                    </form>  
+                                </div>
+                            </div>              
+                        {% endif %}
+
+                        {% if user != profile and profile.is_trainer and user.is_authenticated and user.trainer == None and not user.client_request %}
+                            <form action={% url 'trainer-request' %} method="POST">
+                                {% csrf_token %}
+                                <button class="btn btn-success" name="id" value="{{profile.id}}">Ask to train</button>
+                            </form>
+                        {% endif %}
+
+                        {% if profile.client_request.trainer == user %}
+                            <div class="d-grid gap-3">
+                                <div class="p-1">
+                                    <form action={% url 'trainer-response-yes' %} method='POST'>
+                                        {% csrf_token %}
+                                        <button class="btn btn-success"  name="id" value="{{profile.id}}" >Accept</button>
+                                    </form>    
+                                </div>
+                                <div >
+                                    <form action={% url 'trainer-response-no' %} method='POST'>
+                                        {% csrf_token %}
+                                        <button class="btn btn-danger" name="id" value="{{profile.id}}" >Decline</button>
+                                    </form>    
+                                </div>
+                            </div>
+                        {% endif %}
+
+                        {% if user.client_request.trainer == profile %}
+                            <form action={% url 'cancel-request' %} method='POST'>
+                                {% csrf_token %}
+                                <button class="btn btn-danger"  name="id" value="{{profile.id}}" >Cancel</button>
+                            </form>              
+                        {% endif %}
+                    {% comment "" %}
+                      <button class="btn btn-primary">Follow</button>
+                      <button class="btn btn-outline-primary">Message</button>
+                    {% endcomment %}
+                    
+                    
+                    
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              
+              <div class="card mt-3">
+                <ul class="list-group list-group-flush">
+
+                    
+                  <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                    <h6 class="mb-0">About</h6>
+                    <span class="text-secondary">{{profile.about}}</span>
+                  </li>
+                  
+                  
+                </ul>
+              </div>
+            </div>
+            
+            
+            <div class="col-md-8">
+              <div class="card mb-3">
+                <div class="card-body">
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Full Name</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        {{profile}}
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Gender</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        {% if profile.gender == 'M' %}
+                            Male
+                        {% else %}
+                            Female
+                        {% endif %}
+                        
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0"> Height </h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        {{profile.height}}
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Weight</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        {{profile.weight}}
+                    </div>
+                  </div>
+                  <hr>
+                  <div class="row">
+                    <div class="col-sm-3">
+                      <h6 class="mb-0">Birth date</h6>
+                    </div>
+                    <div class="col-sm-9 text-secondary">
+                        {{profile.birth_date}}
+                    </div>
+                  </div>
+                  <hr>
+
+                {% if user == profile %}
+                  <div class="row">
+                    <div class="col-sm-12">
+                        <form action={% url 'edit-account' %}>
+                                <button class="btn btn-info">Edit</button>
+                        </form>                       
+                    </div>
+                  </div>
+                {% endif %}
+
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+</div>
+
+
+{% endblock  %}

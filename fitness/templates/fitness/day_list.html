@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}{% endblock  %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+
+{% if days %}
+    <h2>Training on {% if month < 10 %}0{% endif %}{{month}}-{{year}}{% if client %} for {{client}}{% endif %}</h2>
+
+    <div class="list-group">
+    {% for day in days %}
+        <a class="list-group-item list-group-item-action list-group-item-secondary" href={% url 'day-detail' day.id %}> {{day}} </a>
+    {% endfor %}
+    </div>
+    <div class="pagination">
+        <span class="step-links">
+            {% if days.has_previous %}
+                <a class="btn btn-primary " href="?page={{ days.previous_page_number }}">{{ days.previous_page_number }}</a>
+            {% endif %}
+
+            <span class="current">
+                <a class="btn btn-danger " href="?page={{ days.number  }}">{{ days.number }}</a>
+            </span>
+
+            {% if days.has_next %}
+                <a class="btn btn-primary " href="?page={{ days.next_page_number }}">{{ days.next_page_number }}</a>
+            {% endif %}
+        </span>
+    </div>
+
+<br>
+
+{% endif %}
+
+
+  
+<form class="form-group" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form|crispy }}
+    <button type="submit" class="btn btn-success">Search</button>
+</form>
+{% if client %}
+    <a href={% url 'day-list-trainer' id=client.id %} class='btn btn-primary'>This month</a>
+{% else %}
+    <a href={% url 'day-list' %} class='btn btn-primary'>This month</a>
+{% endif %}
+
+
+
+{% endblock  %}
